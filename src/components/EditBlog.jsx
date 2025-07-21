@@ -10,7 +10,7 @@ function EditBlog() {
   //   Data fetch
   useEffect(() => {
     axios
-      .get(`/${id}`)
+      .get(`/blog/${id}`)
       .then((res) => {
         setBlog(res.data);
       })
