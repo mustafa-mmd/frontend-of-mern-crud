@@ -1,0 +1,9 @@
+@import "tailwindcss";
+
+.posts {
+  transition: all 0.2s ease-in-out;
+}
+
+.posts:hover {
+  transform: scale(1.05);
+}
