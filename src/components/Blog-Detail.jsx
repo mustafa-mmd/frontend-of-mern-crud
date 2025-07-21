@@ -12,7 +12,7 @@ function BlogDetail() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/blog/${id}`)
+      .get(`/blog/${id}`)
       .then((res) => {
         setBlog(res.data);
       })
@@ -25,7 +25,7 @@ function BlogDetail() {
 
   function HandleDelete() {
     axios
-      .delete(`http://localhost:3000/blog/${id}`)
+      .delete(`/blog/${id}`)
       .then(() => {
         navigate("/");
       })

@@ -22,7 +22,7 @@ function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:3000/register", formData);
+      const res = await axios.post("/register", formData);
       setMessage("Registration successful. Redirecting to login...");
       localStorage.setItem("hasRegistered", "true");
       setRedirecting(true);

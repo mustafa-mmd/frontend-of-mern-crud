@@ -10,7 +10,7 @@ function EditBlog() {
   //   Data fetch
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/blog/${id}`)
+      .get(`/${id}`)
       .then((res) => {
         setBlog(res.data);
       })
@@ -32,7 +32,7 @@ function EditBlog() {
       description: evt.target.description.value,
     };
     axios
-      .patch(`http://localhost:3000/blog/${id}/edit`, data)
+      .patch(`/blog/${id}/edit`, data)
       .then(() => {
         navigate(-1);
       })

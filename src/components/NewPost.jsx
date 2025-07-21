@@ -25,7 +25,7 @@ function NewPost() {
       });
 
       axios
-        .post("http://localhost:3000/new-blog", { formData })
+        .post("/new-blog", { formData })
         .then(() => console.log("data sended"))
         .catch((err) => console.log(err));
     } catch (err) {
