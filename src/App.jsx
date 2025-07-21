@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Home from "./components/Home";
@@ -16,6 +16,7 @@ function PrivateRoute({ children }) {
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const refreshRef = useRef(); // ✅ Add this to share between Home and NewPost
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -27,7 +28,7 @@ function App() {
       <BrowserRouter>
         <Navbar />
         <Routes>
-          {/*  Default redirect */}
+          {/* Default redirect */}
           <Route
             path="/"
             element={
@@ -39,7 +40,7 @@ function App() {
             }
           />
 
-          {/* Register and Login accessible to all */}
+          {/* Public Routes */}
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
 
@@ -48,7 +49,7 @@ function App() {
             path="/home"
             element={
               <PrivateRoute>
-                <Home />
+                <Home refreshRef={refreshRef} /> {/* ✅ Pass ref */}
               </PrivateRoute>
             }
           />
@@ -57,7 +58,7 @@ function App() {
             path="/add-post"
             element={
               <PrivateRoute>
-                <NewPost />
+                <NewPost refreshRef={refreshRef} /> {/* ✅ Pass ref */}
               </PrivateRoute>
             }
           />

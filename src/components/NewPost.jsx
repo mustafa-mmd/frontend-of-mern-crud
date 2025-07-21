@@ -1,33 +1,37 @@
-import { useState } from "react";
+import React from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-function NewPost() {
+function NewPost({ refreshRef }) {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    title: "",
-    description: "",
-    imageUrl: "",
-    author: "",
-    read_time: 0,
-  });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
+  const handleSubmit = async (evt) => {
+    evt.preventDefault();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+    const newPostData = {
+      title: evt.target.title.value,
+      description: evt.target.description.value,
+      imageUrl: evt.target.imageUrl.value,
+      author: evt.target.author.value,
+      read_time: evt.target.read_time.value,
+    };
+
     try {
-      await axios.post("/new-blog", formData);
-      console.log("Blog created successfully!");
+      await axios.post("/new-blog", newPostData);
+      console.log("Post created successfully");
+
+      // Clear form
+      evt.target.reset();
+
+      // Optional: Refresh post list
+      if (refreshRef?.current) {
+        refreshRef.current();
+      }
+
+      // Navigate to Home
       navigate("/home");
     } catch (err) {
-      console.error("Error creating blog:", err);
+      console.error("Error creating post", err);
     }
   };
 
@@ -50,8 +54,6 @@ function NewPost() {
             id="title"
             name="title"
             required
-            value={formData.title}
-            onChange={handleChange}
             className="w-full border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
@@ -65,8 +67,6 @@ function NewPost() {
             id="imageUrl"
             name="imageUrl"
             required
-            value={formData.imageUrl}
-            onChange={handleChange}
             className="w-full border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
@@ -80,8 +80,6 @@ function NewPost() {
             id="author"
             name="author"
             required
-            value={formData.author}
-            onChange={handleChange}
             className="w-full border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
@@ -95,8 +93,6 @@ function NewPost() {
             id="read_time"
             name="read_time"
             required
-            value={formData.read_time}
-            onChange={handleChange}
             className="w-full border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
@@ -109,8 +105,6 @@ function NewPost() {
             id="description"
             name="description"
             required
-            value={formData.description}
-            onChange={handleChange}
             className="w-full border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
@@ -127,3 +121,4 @@ function NewPost() {
 }
 
 export default NewPost;
+
