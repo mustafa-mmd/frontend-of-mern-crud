@@ -1,9 +1,71 @@
+// import { Link } from "react-router-dom";
+// import { useEffect, useState } from "react";
+// import axios from "axios";
+
+// function Home() {
+//   const [Blogs, setBlogs] = useState([]);
+  
+//   useEffect(() => {
+//     axios
+//       .get("/blogs")
+//       .then((res) => {
+//         setBlogs(res.data);
+//       })
+//       .catch((err) => {
+//         console.log(err.message);
+//       });
+//   }, []);
+  
+
+
+//   return (
+//     <>
+//     <p className="m-2.5 text-gray">click on Image see more details</p>
+//     <div className="flex justify-center   flex-wrap gap-x-5 gap-y-3 m-0 p-7">
+//       {Blogs.length > 0 ? (
+//         Blogs.map((blog) => (
+//           <Link
+//             to={`/blog/${blog._id}`}
+//             key={blog._id}
+//             className="h-[350px] w-96 bg-slate-200 rounded-4xl posts"
+//           >
+//             <img
+//               src={blog.imageUrl}
+//               alt={blog.title}
+//               className="rounded-t-4xl w-full"
+//             />
+//             <div className=" p-3 font-bold ">
+//               <h2 className=" text-3xl">{blog.title}</h2>
+//               <h2 className="text-xl font-semibold">
+//                 Author : <span className="text-red-600">{blog.author}</span>
+//               </h2>
+              
+//             </div>
+            
+//           </Link>
+//         ))
+//       ) : (
+//         <h1>No Blogs Founded</h1>
+//       )}
+
+//     </div>
+//     </>
+//   );
+// }
+
+// export default Home;
+
+
+
+// Home.jsx
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-function Home() {
+function Home({ refreshRef }) {
   const [Blogs, setBlogs] = useState([]);
+  const [reload, setReload] = useState(false); // ⬅️ Track reload trigger
+
   useEffect(() => {
     axios
       .get("/blogs")
@@ -13,39 +75,43 @@ function Home() {
       .catch((err) => {
         console.log(err.message);
       });
-  }, []);
+  }, [reload]); // ⬅️ Re-fetch on reload state change
+
+  // Expose refresh function to parent (App.jsx)
+  useEffect(() => {
+    if (refreshRef) {
+      refreshRef.current = () => setReload((prev) => !prev);
+    }
+  }, [refreshRef]);
 
   return (
     <>
-    <p className="m-2.5 text-gray">click on Image see more details</p>
-    <div className="flex justify-center   flex-wrap gap-x-5 gap-y-3 m-0 p-7">
-      {Blogs.length > 0 ? (
-        Blogs.map((blog) => (
-          <Link
-            to={`/blog/${blog._id}`}
-            key={blog._id}
-            className="h-[350px] w-96 bg-slate-200 rounded-4xl posts"
-          >
-            <img
-              src={blog.imageUrl}
-              alt={blog.title}
-              className="rounded-t-4xl w-full"
-            />
-            <div className=" p-3 font-bold ">
-              <h2 className=" text-3xl">{blog.title}</h2>
-              <h2 className="text-xl font-semibold">
-                Author : <span className="text-red-600">{blog.author}</span>
-              </h2>
-              
-            </div>
-            
-          </Link>
-        ))
-      ) : (
-        <h1>No Blogs Founded</h1>
-      )}
-
-    </div>
+      <p className="m-2.5 text-gray">Click on image to see more details</p>
+      <div className="flex justify-center flex-wrap gap-x-5 gap-y-3 m-0 p-7">
+        {Blogs.length > 0 ? (
+          Blogs.map((blog) => (
+            <Link
+              to={`/blog/${blog._id}`}
+              key={blog._id}
+              className="h-[350px] w-96 bg-slate-200 rounded-4xl posts"
+            >
+              <img
+                src={blog.imageUrl}
+                alt={blog.title}
+                className="rounded-t-4xl w-full"
+              />
+              <div className="p-3 font-bold">
+                <h2 className="text-3xl">{blog.title}</h2>
+                <h2 className="text-xl font-semibold">
+                  Author: <span className="text-red-600">{blog.author}</span>
+                </h2>
+              </div>
+            </Link>
+          ))
+        ) : (
+          <h1>No Blogs Found</h1>
+        )}
+      </div>
     </>
   );
 }
